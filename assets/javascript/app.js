@@ -2,38 +2,19 @@ $(document).ready(function() {
   $(".question-bucket").hide();
   var gameTimer;
   var totalGameTime = 30;
+  var currentQuestion = questions[questionIndex];
   var questionIndex = 0;
   //  Variable that will hold our interval ID when we execute the "run" function
-  var intervalId;
+  // var intervalId;
 
-  function run() {
-    clearInterval(intervalId);
-    intervalId = setInterval(decrement, 1000);
-  }
+  // function run() {
+  //   clearInterval(intervalId);
+  //   intervalId = setInterval(decrement, 1000);
+  // }
 
-  //  The decrement function.
-  function decrement() {
-    //  Decrease number by one.
-    number--;
-
-    //  Show the number in the #show-number tag.
-    $("#show-number").html("<h2>" + number + "</h2>");
-
-    //  Once number hits zero...
-    if (number === 0) {
-      //  ...run the stop function.
-      stop();
-      //  Alert the user that time is up.
-      alert("Time Up!");
-    }
-  }
-  //  The stop function
-  function stop() {
-    clearInterval(intervalId);
-  }
   //array with object of questions
 
-  var trivia = [
+  var questions = [
     {
       question: "This is question one",
       answers: [
@@ -134,7 +115,7 @@ $(document).ready(function() {
     $(".question-bucket").show();
     $("#start-button").hide();
     $("#instructions").hide();
-  }
+  };
   //timer
   function startTimer() {
     gameTimer = setInterval(function() {
@@ -154,28 +135,44 @@ $(document).ready(function() {
   function cycleQuestion() {
     var parentDiv = $("<div>");
     var pQuestionText = $("<p>");
-    pQuestionText.text(trivia[questionIndex].text);
+    pQuestionText.text(questions[questionIndex].text);
     parentDiv.append(pQuestionText);
     //dynamically display question options
     for (let i = 0; i < questions[questionIndex].options.length; i++) {
       var optionButton = "<button>";
       optionButton.addClass("btn btn-info");
+      optionButton.text(currentQuestion.options[i]);
+      optionButton.val(i);
+      parentDiv.append(optionButton);
     }
     $(".questions").append(parentDiv);
+  };
+
+  $(document).on("click", ".answer", function() {
+    var clickedButton = $(this);
+    if (clickedButton.val() === questions[questionIndex].answer) {
+      console.log("that is correct")
+    //increase the correct count
+    }
+    else {
+      console.log("this is wrong");
+      //increase the wrong count
+    }
+
   }
 
-  function twentySeconds() {
-    //should display answers if time runs out
-    console.log("tom o");
-  }
-  //when timer runs out, get new question by calling this function:
-  function getNewQuestion() {
-    for (let i = 0; i < trivia.length; i++) {
-      var question = trivia[i].question;
-      console.log(question);
-      return question;
-    }
-  }
+  // function twentySeconds() {
+  //   //should display answers if time runs out
+  //   console.log("tom o");
+  // }
+  // //when timer runs out, get new question by calling this function:
+  // function getNewQuestion() {
+  //   for (let i = 0; i < trivia.length; i++) {
+  //     var question = trivia[i].question;
+  //     console.log(question);
+  //     return question;
+  //   }
+  // }
   //   console.log(getNewQuestion);
   //Start button to display first question
 

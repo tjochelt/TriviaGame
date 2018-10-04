@@ -1,6 +1,37 @@
 $(document).ready(function() {
-  //array with object of questions
   $(".question-bucket").hide();
+  var gameTimer;
+  var totalGameTime = 30;
+  var questionIndex = 0;
+  //  Variable that will hold our interval ID when we execute the "run" function
+  var intervalId;
+
+  function run() {
+    clearInterval(intervalId);
+    intervalId = setInterval(decrement, 1000);
+  }
+
+  //  The decrement function.
+  function decrement() {
+    //  Decrease number by one.
+    number--;
+
+    //  Show the number in the #show-number tag.
+    $("#show-number").html("<h2>" + number + "</h2>");
+
+    //  Once number hits zero...
+    if (number === 0) {
+      //  ...run the stop function.
+      stop();
+      //  Alert the user that time is up.
+      alert("Time Up!");
+    }
+  }
+  //  The stop function
+  function stop() {
+    clearInterval(intervalId);
+  }
+  //array with object of questions
 
   var trivia = [
     {
@@ -11,7 +42,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "this is choice 1"
+      correct: 1
     },
     {
       question: "This is question two",
@@ -21,7 +52,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "this is choice 3"
+      correct: 3
     },
     {
       question: "This is question three",
@@ -31,7 +62,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "This is question 3"
+      correct: 4
     },
     {
       question: "This is question four",
@@ -41,7 +72,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "This is question 3"
+      correct: 1
     },
     {
       question: "This is question five",
@@ -51,7 +82,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "This is question 3"
+      correct: 3
     },
     {
       question: "This is question six",
@@ -61,7 +92,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "This is question 3"
+      correct: 2
     },
     {
       question: "This is question seven",
@@ -71,7 +102,7 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "This is question 3"
+      correct: 2
     },
     {
       question: "This is question eight",
@@ -81,33 +112,77 @@ $(document).ready(function() {
         "this is choice 3",
         "this is choice 4"
       ],
-      correct: "This is question 3"
+      correct: 4
     }
   ];
-  //Start button to display first question
-
-  function startQuiz() {
-    // var x = $("#question");
-    cycleQuestion();
-    $(".question-bucket").show();
-    $("#start-button").hide();
-  }
-  function cycleQuestion() {
-    setTimeout(thirtySeconds, 1000 * 3);
-  }
-
+  //button starts quiz
   $("#start-button").click(function() {
     console.log("hi tom");
     startQuiz();
   });
+  //startQuiz shows questions, hides start button
+  //begins cycle questoin
+  function startQuiz() {
+    //display timer
+    $(".timer").text(totalGameTime);
+    //start a timer
+    startTimer();
+    //display a question
+    //set the scrore
+    cycleQuestion();
+    run();
+    $(".question-bucket").show();
+    $("#start-button").hide();
+    $("#instructions").hide();
+  }
+  //timer
+  function startTimer() {
+    gameTimer = setInterval(function() {
+      totalGameTime--;
+      $(".timer").text(totalGameTime);
+      if (totalGameTime === 0) {
+        setInterval(gameTimer);
+        endGame();
+      }
+    }, 1000);
+    setTimeout(twentySeconds, 1000 * 2);
+  }
+  function endGame() {
+    //display message;
+    //reset the game and anything else
+  }
+  function cycleQuestion() {
+    var parentDiv = $("<div>");
+    var pQuestionText = $("<p>");
+    pQuestionText.text(trivia[questionIndex].text);
+    parentDiv.append(pQuestionText);
+    //dynamically display question options
+    for (let i = 0; i < questions[questionIndex].options.length; i++) {
+      var optionButton = "<button>";
+      optionButton.addClass("btn btn-info");
+    }
+    $(".questions").append(parentDiv);
+  }
+
+  function twentySeconds() {
+    //should display answers if time runs out
+    console.log("tom o");
+  }
+  //when timer runs out, get new question by calling this function:
+  function getNewQuestion() {
+    for (let i = 0; i < trivia.length; i++) {
+      var question = trivia[i].question;
+      console.log(question);
+      return question;
+    }
+  }
+  //   console.log(getNewQuestion);
+  //Start button to display first question
 
   //boolean to tell if you're on the question or not.
 
   //Display question 1 with four choices. Starts timer.
   //Set timer for 30 seconds.
-  function thirtySeconds() {
-    console.log("tom o");
-  }
   //append the answers and next question to the UI
   //use for loop
 

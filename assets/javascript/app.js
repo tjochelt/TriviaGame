@@ -2,8 +2,9 @@ $(document).ready(function() {
   $(".question-bucket").hide();
   var gameTimer;
   var totalGameTime = 30;
-  var currentQuestion = questions[questionIndex];
+  var questions = [];
   var questionIndex = 0;
+
   //  Variable that will hold our interval ID when we execute the "run" function
   // var intervalId;
 
@@ -14,88 +15,30 @@ $(document).ready(function() {
 
   //array with object of questions
 
-  var questions = [
+  questions = [
     {
-      question: "This is question one",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
+      question: "What is blue?",
+      answers: ["green", "blue", "yellow", "red"],
       correct: 1
     },
     {
-      question: "This is question two",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
+      question: "Where is Baxter?",
+      answers: ["Dysart", "Kenosha", "Chicago", "Milwaukee"],
       correct: 3
     },
     {
-      question: "This is question three",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
-      correct: 4
+      question: "What is the tallest building in Chicago?",
+      answers: ["Sears Tower", "Willis Tower", "Trump Tower", "Hancock Center"],
+      correct: 0
     },
     {
-      question: "This is question four",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
+      question: "What's the word?",
+      answers: ["Dog", "The Bird", "Cat", "Dingo"],
       correct: 1
-    },
-    {
-      question: "This is question five",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
-      correct: 3
-    },
-    {
-      question: "This is question six",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
-      correct: 2
-    },
-    {
-      question: "This is question seven",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
-      correct: 2
-    },
-    {
-      question: "This is question eight",
-      answers: [
-        "this is choice 1",
-        "this is choice 2",
-        "this is choice 3",
-        "this is choice 4"
-      ],
-      correct: 4
     }
   ];
+  var currentQuestion = questions[questionIndex];
+  console.log(currentQuestion);
   //button starts quiz
   $("#start-button").click(function() {
     console.log("hi tom");
@@ -105,20 +48,23 @@ $(document).ready(function() {
   //begins cycle questoin
   function startQuiz() {
     //display timer
-    $(".timer").text(totalGameTime);
+    // $(".timer").text(totalGameTime);
+    // console.log(totalGameTime);
     //start a timer
     startTimer();
     //display a question
     //set the scrore
     cycleQuestion();
-    run();
+    // run();
     $(".question-bucket").show();
     $("#start-button").hide();
     $("#instructions").hide();
-  };
+  }
   //timer
   function startTimer() {
+    console.log("that worked");
     gameTimer = setInterval(function() {
+      console.log("that also worked");
       totalGameTime--;
       $(".timer").text(totalGameTime);
       if (totalGameTime === 0) {
@@ -126,7 +72,7 @@ $(document).ready(function() {
         endGame();
       }
     }, 1000);
-    setTimeout(twentySeconds, 1000 * 2);
+    // setTimeout(twentySeconds, 1000 * 2);
   }
   function endGame() {
     //display message;
@@ -135,34 +81,33 @@ $(document).ready(function() {
   function cycleQuestion() {
     var parentDiv = $("<div>");
     var pQuestionText = $("<p>");
-    pQuestionText.text(questions[questionIndex].text);
+    console.log(currentQuestion);
+    pQuestionText.text(currentQuestion.question);
     parentDiv.append(pQuestionText);
     //dynamically display question options
-    for (let i = 0; i < questions[questionIndex].options.length; i++) {
-      var optionButton = "<button>";
+    for (let i = 0; i < currentQuestion.answers.length; i++) {
+      var optionButton = $("<button>");
       optionButton.addClass("btn btn-info");
-      optionButton.text(currentQuestion.options[i]);
-      optionButton.val(i);
+      optionButton.text(currentQuestion.answers[i]);
+      optionButton.attr("value", i);
       parentDiv.append(optionButton);
     }
     $(".questions").append(parentDiv);
-  };
+  }
 
   $(document).on("click", ".answer", function() {
     var clickedButton = $(this);
-    if (clickedButton.val() === questions[questionIndex].answer) {
-      console.log("that is correct")
-    //increase the correct count
-    }
-    else {
+    if (clickedButton.val() === currentQuestion.correct) {
+      console.log("that is correct");
+      //increase the correct count
+    } else {
       console.log("this is wrong");
       //increase the wrong count
     }
+  });
 
-  }
-
-  // function twentySeconds() {
-  //   //should display answers if time runs out
+  // // function twentySeconds() {
+  // //   //should display answers if time runs out
   //   console.log("tom o");
   // }
   // //when timer runs out, get new question by calling this function:

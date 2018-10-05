@@ -1,9 +1,10 @@
 $(document).ready(function() {
   $(".question-bucket").hide();
   var gameTimer;
-  var totalGameTime = 30;
+  var totalQuestionTime = 5;
   var questions = [];
   var questionIndex = 0;
+  // var correctAnswer = questions[i].ans;
 
   //  Variable that will hold our interval ID when we execute the "run" function
   // var intervalId;
@@ -19,26 +20,26 @@ $(document).ready(function() {
     {
       question: "What is blue?",
       answers: ["green", "blue", "yellow", "red"],
-      correct: 1
+      correct: "blue"
     },
     {
       question: "Where is Baxter?",
       answers: ["Dysart", "Kenosha", "Chicago", "Milwaukee"],
-      correct: 3
+      correct: "Milwaukee"
     },
     {
       question: "What is the tallest building in Chicago?",
       answers: ["Sears Tower", "Willis Tower", "Trump Tower", "Hancock Center"],
-      correct: 0
+      correct: "Sears Tower"
     },
     {
       question: "What's the word?",
       answers: ["Dog", "The Bird", "Cat", "Dingo"],
-      correct: 1
+      correct: "The Bird"
     }
   ];
   var currentQuestion = questions[questionIndex];
-  console.log(currentQuestion);
+  // console.log(currentQuestion);
   //button starts quiz
   $("#start-button").click(function() {
     console.log("hi tom");
@@ -48,8 +49,8 @@ $(document).ready(function() {
   //begins cycle questoin
   function startQuiz() {
     //display timer
-    // $(".timer").text(totalGameTime);
-    // console.log(totalGameTime);
+    // $(".timer").text(totalQuestionTime);
+    // console.log(totalQuestionTime);
     //start a timer
     startTimer();
     //display a question
@@ -62,26 +63,34 @@ $(document).ready(function() {
   }
   //timer
   function startTimer() {
-    console.log("that worked");
+    // console.log("that worked");
     gameTimer = setInterval(function() {
-      console.log("that also worked");
-      totalGameTime--;
-      $(".timer").text(totalGameTime);
-      if (totalGameTime === 0) {
-        setInterval(gameTimer);
-        endGame();
+      // console.log("that also worked");
+      totalQuestionTime--;
+      $(".timer").text(totalQuestionTime);
+      if (totalQuestionTime === 0) {
+        endQuestion();
       }
     }, 1000);
-    // setTimeout(twentySeconds, 1000 * 2);
+    // setInterval(twentySeconds, 1000 * 2);
   }
-  function endGame() {
+  //end question should set alert, stop timers, trigger the correct answers to show
+  function endQuestion() {
     //display message;
-    //reset the game and anything else
+    //show answer to question
+    alert("Time's up, sucka!");
+    clearInterval(gameTimer);
+    // showCorrect();
   }
+  // function showCorrect() {
+  //   $(".questions").html(correctAnswer);
+  // }
+
+  //cycles through questions
   function cycleQuestion() {
     var parentDiv = $("<div>");
     var pQuestionText = $("<p>");
-    console.log(currentQuestion);
+    // console.log(currentQuestion);
     pQuestionText.text(currentQuestion.question);
     parentDiv.append(pQuestionText);
     //dynamically display question options
@@ -94,13 +103,16 @@ $(document).ready(function() {
     }
     $(".questions").append(parentDiv);
   }
-
-  $(document).on("click", ".answer", function() {
+  //logic to check if clicked button matches correct answer. Incomplete.Needs to also update total.
+  $(document).on("click", "#question", function() {
     var clickedButton = $(this);
+    // console.log(currentQuestion.correct);
     if (clickedButton.val() === currentQuestion.correct) {
+      console.log(clickedButton.val());
       console.log("that is correct");
       //increase the correct count
     } else {
+      console.log(clickedButton.val());
       console.log("this is wrong");
       //increase the wrong count
     }
@@ -121,22 +133,9 @@ $(document).ready(function() {
   //   console.log(getNewQuestion);
   //Start button to display first question
 
-  //boolean to tell if you're on the question or not.
-
-  //Display question 1 with four choices. Starts timer.
-  //Set timer for 30 seconds.
-  //append the answers and next question to the UI
-  //use for loop
-
-  //if timer runs out, say times up and display answer. add one to unanswered total.
-
   //Start shorter timer whilst showing correct answer. move on to next question when shorter timer runs out.
-
-  //if if user guesses wrong, say youre wrong and display answer. add one to incorrect total.
-
-  //if user guesses correct answer, say youre right. add one to correct total.
 
   //when done with list of questions, show finished screen, total score.
 
-  //start over button restarts game
+  //start over button restarts game by showing the start button again and hiding the question bucket.
 });

@@ -4,6 +4,9 @@ $(document).ready(function() {
   var totalQuestionTime = 5;
   var questions = [];
   var questionIndex = 0;
+  var numberCorrect = 0;
+  var numberIncorrect = 0;
+  var timeOut = 0;
   // var correctAnswer = questions[i].ans;
 
   //  Variable that will hold our interval ID when we execute the "run" function
@@ -20,22 +23,22 @@ $(document).ready(function() {
     {
       question: "What is blue?",
       answers: ["green", "blue", "yellow", "red"],
-      correct: "blue"
+      correct: 1
     },
     {
       question: "Where is Baxter?",
       answers: ["Dysart", "Kenosha", "Chicago", "Milwaukee"],
-      correct: "Milwaukee"
+      correct: 3
     },
     {
       question: "What is the tallest building in Chicago?",
       answers: ["Sears Tower", "Willis Tower", "Trump Tower", "Hancock Center"],
-      correct: "Sears Tower"
+      correct: 0
     },
     {
       question: "What's the word?",
       answers: ["Dog", "The Bird", "Cat", "Dingo"],
-      correct: "The Bird"
+      correct: 1
     }
   ];
   var currentQuestion = questions[questionIndex];
@@ -69,6 +72,18 @@ $(document).ready(function() {
       totalQuestionTime--;
       $(".timer").text(totalQuestionTime);
       if (totalQuestionTime === 0) {
+        alert("Time's up, sucka!");
+        timeOut++;
+        $("#question").append(
+          "Time's up! The correct answer is " +
+            currentQuestion.answers[currentQuestion.correct] +
+            "! <br>Total correct answers: " +
+            numberCorrect +
+            "<br>Total incorrect answers: " +
+            numberIncorrect +
+            "<br>Total unanswered: " +
+            timeOut
+        );
         endQuestion();
       }
     }, 1000);
@@ -78,7 +93,7 @@ $(document).ready(function() {
   function endQuestion() {
     //display message;
     //show answer to question
-    alert("Time's up, sucka!");
+    // alert("Time's up, sucka!");
     clearInterval(gameTimer);
     // showCorrect();
   }
@@ -96,7 +111,7 @@ $(document).ready(function() {
     //dynamically display question options
     for (let i = 0; i < currentQuestion.answers.length; i++) {
       var optionButton = $("<button>");
-      optionButton.addClass("btn btn-info");
+      optionButton.addClass("btn btn-info clicked");
       optionButton.text(currentQuestion.answers[i]);
       optionButton.attr("value", i);
       parentDiv.append(optionButton);
@@ -104,24 +119,49 @@ $(document).ready(function() {
     $(".questions").append(parentDiv);
   }
   //logic to check if clicked button matches correct answer. Incomplete.Needs to also update total.
-  $(document).on("click", "#question", function() {
+  function nextQuestion() {
+    setTimeout(function() {
+      console.log("what up");
+    }, 1000 * 7);
+    cycleQuestion();
+  }
+  $(document).on("click", ".clicked", function() {
+    endQuestion();
+    // showAnswer();
+
     var clickedButton = $(this);
+    // var clickDiv = $("<div>");
+    // clickDiv.addClass("answer-click");
     // console.log(currentQuestion.correct);
-    if (clickedButton.val() === currentQuestion.correct) {
-      console.log(clickedButton.val());
-      console.log("that is correct");
+    // console.log(clickedButton.val());
+    if (clickedButton.val() == currentQuestion.correct) {
+      $("#question").append("You're correct!");
+      numberCorrect++;
+      $("#question").append(
+        "<br>Total correct answers: " +
+          numberCorrect +
+          "<br>Total incorrect answers: " +
+          numberIncorrect +
+          "<br>Total unanswered: " +
+          timeOut
+      );
       //increase the correct count
     } else {
-      console.log(clickedButton.val());
-      console.log("this is wrong");
-      //increase the wrong count
+      numberIncorrect++;
+      $("#question").append(
+        "Wrong! The correct answer is " +
+          currentQuestion.answers[currentQuestion.correct] +
+          "! <br>Total correct answers: " +
+          numberCorrect +
+          "<br>Total incorrect answers: " +
+          numberIncorrect +
+          "<br>Total unanswered: " +
+          timeOut
+      );
     }
   });
 
-  // // function twentySeconds() {
   // //   //should display answers if time runs out
-  //   console.log("tom o");
-  // }
   // //when timer runs out, get new question by calling this function:
   // function getNewQuestion() {
   //   for (let i = 0; i < trivia.length; i++) {
